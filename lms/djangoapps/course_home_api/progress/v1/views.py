@@ -17,6 +17,7 @@ from common.djangoapps.student.models import CourseEnrollment
 from lms.djangoapps.course_home_api.progress.v1.serializers import ProgressTabSerializer
 from lms.djangoapps.course_home_api.toggles import course_home_mfe_progress_tab_is_active
 from lms.djangoapps.courseware.access import has_access, has_ccx_coach_role
+from lms.djangoapps.courseware.context_processor import user_timezone_locale_prefs
 from lms.djangoapps.course_blocks.api import get_course_blocks
 from lms.djangoapps.course_blocks.transformers import start_date
 
@@ -32,6 +33,7 @@ from openedx.core.djangoapps.content.block_structure.api import get_block_struct
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 from openedx.core.lib.api.authentication import BearerAuthenticationAllowInactiveUser
 from openedx.features.content_type_gating.block_transformers import ContentTypeGateTransformer
+from openedx.features.course_duration_limits.access import get_access_expiration_data
 from openedx.features.enterprise_support.utils import get_enterprise_learner_generic_name
 
 
@@ -50,10 +52,11 @@ class ProgressTabView(RetrieveAPIView):
 
         Body consists of the following fields:
 
-        end: (date) end date of the course
-        user_has_passing_grade: (bool) boolean on if the user has a passing grade in the course
-        username: (str) username of the student whose progress information is being displayed.
-        has_scheduled_content: (bool) boolean on if the course has content scheduled with a release date in the future
+        access_expiration: An object detailing when access to this course will expire
+            expiration_date: (str) When the access expires, in ISO 8601 notation
+            masquerading_expired_course: (bool) Whether this course is expired for the masqueraded user
+            upgrade_deadline: (str) Last chance to upgrade, in ISO 8601 notation (or None if can't upgrade anymore)
+            upgrade_url: (str) Upgrade link (or None if can't upgrade anymore)
         certificate_data: Object containing information about the user's certificate status
             cert_status: (str) the status of a user's certificate (full list of statuses are defined in
                          lms/djangoapps/certificates/models.py)
@@ -68,6 +71,18 @@ class ProgressTabView(RetrieveAPIView):
             letter_grade: (str) the user's letter grade based on the set grade range.
                                 If user is passing, value may be 'A', 'B', 'C', 'D', 'Pass', otherwise none
             percent: (float) the user's total graded percent in the course
+        end: (date) end date of the course
+        enrollment_mode: (str) a str representing the enrollment the user has ('audit', 'verified', ...)
+        grading_policy:
+            assignment_policies: List of serialized assignment grading policy objects, each has the following fields:
+                num_droppable: (int) the number of lowest scored assignments that will not be counted towards the final grade
+                short_label: (str) the abbreviated name given to the assignment type
+                type: (str) the assignment type
+                weight: (float) the percent weight the given assigment type has on the overall grade
+            grade_range: an object containing the grade range cutoffs. The exact keys in the object can vary, but they
+                         range from just 'Pass', to a combination of 'A', 'B', 'C', and 'D'. If a letter grade is present,
+                         'Pass' is not included.
+        has_scheduled_content: (bool) boolean on if the course has content scheduled with a release date in the future
         section_scores: List of serialized Chapters. Each Chapter has the following fields:
             display_name: (str) a str of what the name of the Chapter is for displaying on the site
             subsections: List of serialized Subsections, each has the following fields:
@@ -88,17 +103,10 @@ class ProgressTabView(RetrieveAPIView):
                 show_grades: (bool) a bool for whether to show grades based on the access the user has
                 url: (str or None) the absolute path url to the Subsection or None if the Subsection is no longer accessible
                     to the learner due to a hide_after_due course team setting
-        enrollment_mode: (str) a str representing the enrollment the user has ('audit', 'verified', ...)
-        grading_policy:
-            assignment_policies: List of serialized assignment grading policy objects, each has the following fields:
-                num_droppable: (int) the number of lowest scored assignments that will not be counted towards the final grade
-                short_label: (str) the abbreviated name given to the assignment type
-                type: (str) the assignment type
-                weight: (float) the percent weight the given assigment type has on the overall grade
-            grade_range: an object containing the grade range cutoffs. The exact keys in the object can vary, but they
-                         range from just 'Pass', to a combination of 'A', 'B', 'C', and 'D'. If a letter grade is present,
-                         'Pass' is not included.
         studio_url: (str) a str of the link to the grading in studio for the course
+        user_has_passing_grade: (bool) boolean on if the user has a passing grade in the course
+        username: (str) username of the student whose progress information is being displayed.
+        user_timezone: (str) The timezone of the given user
         verification_data: an object containing
             link: (str) the link to either start or retry ID verification
             status: (str) the status of the ID verification
@@ -211,18 +219,26 @@ class ProgressTabView(RetrieveAPIView):
             'status_date': verification_status['status_date'],
         }
 
+        access_expiration = get_access_expiration_data(request.user, course_overview)
+
+        # User locale settings
+        user_timezone_locale = user_timezone_locale_prefs(request)
+        user_timezone = user_timezone_locale['user_timezone']
+
         data = {
-            'username': username,
-            'end': course.end,
-            'user_has_passing_grade': user_has_passing_grade,
+            'access_expiration': access_expiration,
             'certificate_data': get_cert_data(student, course, enrollment_mode, course_grade),
             'completion_summary': get_course_blocks_completion_summary(course_key, student),
             'course_grade': course_grade,
-            'has_scheduled_content': has_scheduled_content,
-            'section_scores': course_grade.chapter_grades.values(),
+            'end': course.end,
             'enrollment_mode': enrollment_mode,
             'grading_policy': grading_policy,
+            'has_scheduled_content': has_scheduled_content,
+            'section_scores': course_grade.chapter_grades.values(),
             'studio_url': get_studio_url(course, 'settings/grading'),
+            'username': username,
+            'user_has_passing_grade': user_has_passing_grade,
+            'user_timezone': user_timezone,
             'verification_data': verification_data,
         }
         context = self.get_serializer_context()

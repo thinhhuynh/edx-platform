@@ -119,15 +119,17 @@ class ProgressTabSerializer(VerifiedModeSerializerMixin):
     """
     Serializer for progress tab
     """
-    username = serializers.CharField()
+    access_expiration = serializers.DictField()
     certificate_data = CertificateDataSerializer()
     completion_summary = serializers.DictField()
     course_grade = CourseGradeSerializer()
     end = serializers.DateTimeField()
-    user_has_passing_grade = serializers.BooleanField()
-    has_scheduled_content = serializers.BooleanField()
-    section_scores = SectionScoresSerializer(many=True)
     enrollment_mode = serializers.CharField()
     grading_policy = GradingPolicySerializer()
+    has_scheduled_content = serializers.BooleanField()
+    section_scores = SectionScoresSerializer(many=True)
     studio_url = serializers.CharField()
+    username = serializers.CharField()
+    user_has_passing_grade = serializers.BooleanField()
+    user_timezone = serializers.CharField()
     verification_data = VerificationDataSerializer()
