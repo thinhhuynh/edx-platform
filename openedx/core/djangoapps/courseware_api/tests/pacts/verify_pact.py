@@ -11,11 +11,11 @@ log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 PACT_DIR = os.path.dirname(os.path.realpath(__file__))
-PACT_FILE = "api-block-contract.json"
+PACT_FILE = "api-courseware-contract.json"
 
 
 class ProviderVerificationServer(LiveServerTestCase):
-    """ Sample Live Server for Pact Verification"""
+    """ Live Server for Pact Verification"""
 
     @classmethod
     def setUpClass(cls):
@@ -36,7 +36,7 @@ class ProviderVerificationServer(LiveServerTestCase):
         output, _ = self.verifier.verify_pacts(
             os.path.join(PACT_DIR, PACT_FILE),
             headers=['Pact-Authentication: Allow', ],
-            provider_states_setup_url=f"{self.PACT_URL}{reverse('provider-state-view')}",
+            provider_states_setup_url=f"{self.PACT_URL}{reverse('courseware_api:provider-state-view')}",
         )
 
         assert output == 0
