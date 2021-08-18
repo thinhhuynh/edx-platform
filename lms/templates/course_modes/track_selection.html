@@ -3,10 +3,9 @@
 <%namespace name='static' file='/static_content.html'/>
 <%!
 from django.utils.translation import ugettext as _
-from django.urls import reverse
-from opaque_keys.edx.keys import CourseKey
-from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_string
 from openedx.core.djangolib.markup import HTML, Text
+from django.urls import reverse
+from openedx.core.djangolib.js_utils import js_escaped_string
 %>
 
 <%namespace name='static' file='/static_content.html'/>
@@ -109,12 +108,9 @@ from openedx.core.djangolib.markup import HTML, Text
         <section class="wrapper m-4 m-md-0" dir="ltr"> 
             <div class="row">
                 <header>
-                    <h3 class="py-3 pt-md-5 pb-md-4">Choose a path for your course in ${course_name}</h3>
+                    <h3 class="py-3 pt-md-5 pb-md-4">${_("Choose a path for your course in")} ${_(course_name)}</h3>
                 </header>
                 <form class="form-track-selection" method="post" name="enrollment_mode_form" id="enrollment_mode_form">
-                    <%
-                    b_tag_kwargs = {'b_start': HTML('<b>'), 'b_end': HTML('</b>')}
-                    %>
                     % if "verified" in modes:
                     <div class="track-selection-choice track-selection-certificate col-6 mb-5">
                         <div class="certificate-container">
@@ -128,21 +124,38 @@ from openedx.core.djangolib.markup import HTML, Text
                             <div class="choice-title"><h4>${_("Earn a certificate")}</h4></div>
                             <div class="choice-bullets">
                                 <ul>
-                                    <li>Showcase a <a class="verified" href="https://www.edx.org/verified-certificate" target="_blank"><b><u> verified certificate</u></b></a> of completion on your resumé to advance your career</li>
-                                    <li>Get <b>access to all course activities</b>, including both graded and non-graded assignments, while the course is running</li>
-                                    <div class="collapsible">Show more</div>
-                                    <li class="collapsible-item"><b>Gain full access</b> to course content and materials, even after the course ends <span class="popover-icon"><i class="fa fa-question-circle" aria-hidden="true"></i><span class="popover"><a href="https://support.edx.org/hc/en-us/articles/360013426573-What-are-the-differences-between-audit-free-and-verified-paid-courses-" target="_blank"><u>Learn more</u></a> about course access</span></span></li>
-                                    <li class="collapsible-item">Support our <b>non-profit mission</b> to increase access to high-quality education for everyone, everywhere</li>
+                                    <li>${Text(_("Showcase a {link_start}verified certificate{link_end} of completion on your resumé to advance your career")).format(
+                                        link_start=HTML('<a class="verified" href="https://www.edx.org/verified-certificate" target="_blank">'),
+                                        link_end=HTML('</a>'),
+                                    )}</li>
+                                    <li>${Text(_("Get {start_bold}access to all course activities{end_bold}, including both graded and non-graded assignments, while the course is running")).format(
+                                        start_bold=HTML('<b>'),
+                                        end_bold=HTML('</b>'),
+                                    )}</li>
+                                    <div class="collapsible">${_("Show more")}</div>
+                                    <li class="collapsible-item">${Text(_("{start_bold}Gain full access{end_bold} to course content and materials, even after the course ends {start_span}{popover_icon}{popover_start_span}{link_start}Learn more{link_end} about course access{end_span}{end_span}")).format(
+                                        start_bold=HTML('<b>'),
+                                        end_bold=HTML('</b>'),
+                                        start_span=HTML('<span class="popover-icon">'),
+                                        end_span=HTML('</span>'),
+                                        popover_icon=HTML('<i class="fa fa-question-circle" aria-hidden="true"></i>')
+                                        popover_start_span=HTML('<span class="popover">'),
+                                        link_start=HTML('<a href="https://support.edx.org/hc/en-us/articles/360013426573-What-are-the-differences-between-audit-free-and-verified-paid-courses-" target="_blank">'),
+                                        link_end=HTML('</a>'),
+                                    )}</li>
+                                    <li class="collapsible-item">${Text(_("Support our {start_bold}non-profit mission{end_bold} to increase access to high-quality education for everyone, everywhere")).format(
+                                        start_bold=HTML('<b>'),
+                                        end_bold=HTML('</b>'),
+                                    )}</li>
                                 </ul>
                             </div>
-                            <!-- JK TODO: check ids, do a separate template? -->
                             <ul class="list-actions">
-                            <li class="action action-select upgrade-button">
-                                <input type="hidden" name="contribution" value="${price_before_discount or min_price}" />
-                                    <button id="track_selection_upgrade" type="submit" name="verified_mode">
-                                        <span>${_('Upgrade Now')}</span>
-                                
-                            </li>
+                                <li class="action action-select upgrade-button">
+                                    <input type="hidden" name="contribution" value="${price_before_discount or min_price}" />
+                                        <button id="track_selection_upgrade" type="submit" name="verified_mode">
+                                            <span>${_('Upgrade Now')}</span>
+                                        </buton>
+                                </li>
                             </ul>
                             <%static:require_module_async module_name="js/commerce/track_ecommerce_events" class_name="TrackECommerceEvents">
                             var upgradeLink = $("#track_selection_upgrade");
@@ -157,23 +170,30 @@ from openedx.core.djangolib.markup import HTML, Text
                         </div>
                         <div class="certificate-container-bottom">
                             <span class="mt-1"><i class="fa fa-lightbulb-o fa-lg" aria-hidden="true"></i></span>
-                            <div class="extra-verified-info">
-                                Studies show that those who choose this option are <b>more engaged and motivated</b> to complete their courses
-                            </div>
+                            <div class="extra-verified-info">${Text(_("Studies show that those who choose this option are  {start_bold}more engaged and motivated{end_bold} to complete their courses")).format(
+                                start_bold=HTML('<b>'),
+                                end_bold=HTML('</b>'),
+                            )}</div>
                         </div>
                     </div>
                     % endif
                     <div class="track-selection-choice track-selection-audit col-6">
-                        <p class="float-right m-3"><b>FREE</b></p>
+                        <p class="float-right m-3"><b>${_("FREE")}</b></p>
                         <div class="choice-title"><h4>${_("Access this course")}</h4></div>
                         <div class="choice-bullets mb-large">
                             <ul>
-                                <li>Get temporary access to <b>non-graded</b> activities, including discussion forums and non-graded assignments</li>
-                                <li>Get <b>temporary access</b> to the course material, including videos and readings</li>
+                                <li>${Text(_("Get temporary access to  {start_bold}non-graded{end_bold} activities, including discussion forums and non-graded assignments")).format(
+                                    start_bold=HTML('<b>'),
+                                    end_bold=HTML('</b>'),
+                                )}</li>
+                                <li>${Text(_("Get {start_bold}temporary access{end_bold} to the course material, including videos and readings")).format(
+                                    start_bold=HTML('<b>'),
+                                    end_bold=HTML('</b>'),
+                                )}</li>
                                 % if audit_access_deadline:
-                                <li>Access expires and all progress will be lost on  ${audit_access_deadline}</li>
+                                <li>${_(Access expires and all progress will be lost on)} ${_(audit_access_deadline)}</li>
                                 % else:
-                                <li>Access expires and all progress will be lost</li>
+                                <li>${_("Access expires and all progress will be lost")}</li>
                                 % endif
                             </ul>
                         </div>
@@ -182,6 +202,7 @@ from openedx.core.djangolib.markup import HTML, Text
                                 <input type="hidden" name="contribution" />
                                 <button id="track_selection_audit" type="submit" name="audit_mode">
                                     <span>${_('Continue')}</span>
+                                </button>
                             </li>
                         </ul>
                     </div>
