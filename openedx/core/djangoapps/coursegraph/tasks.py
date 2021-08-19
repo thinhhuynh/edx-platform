@@ -288,7 +288,7 @@ def dump_course_to_neo4j(course_key_string, credentials):
             "Error trying to dump course %s to neo4j, rolling back",
             course_string
         )
-        transaction.rollback()
+        graph.rollback(transaction)
 
 
 class ModuleStoreSerializer:

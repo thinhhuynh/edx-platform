@@ -26,6 +26,26 @@ class MockGraph:
         """
         return MockTransaction(self)
 
+    def commit(self, transaction):
+        """
+        Takes elements in the mock transaction's temporary storage and adds them
+        to this mock graph's storage. Throws an error if this graph's
+        transaction_errors param is set to True.
+        """
+        if self.transaction_errors:
+            raise Exception("fake exception while trying to commit")
+        for element in transaction.temp:
+            self.nodes.add(element)
+        transaction.temp.clear()
+        self.number_commits += 1
+
+    def rollback(self, transaction):
+        """
+        Clears the transactions temporary storage
+        """
+        transaction.temp.clear()
+        self.number_rollbacks += 1
+
 
 class MockTransaction:
     """
@@ -62,26 +82,6 @@ class MockTransaction:
         """
         if isinstance(element, Node):
             self.temp.add(element)
-
-    def commit(self):
-        """
-        Takes elements in the transaction's temporary storage and adds them
-        to the mock graph's storage. Throws an error if the graph's
-        transaction_errors param is set to True.
-        """
-        if self.graph.transaction_errors:
-            raise Exception("fake exception while trying to commit")
-        for element in self.temp:
-            self.graph.nodes.add(element)
-        self.temp.clear()
-        self.graph.number_commits += 1
-
-    def rollback(self):
-        """
-        Clears the transactions temporary storage
-        """
-        self.temp.clear()
-        self.graph.number_rollbacks += 1
 
 
 class MockNodeMatcher:
