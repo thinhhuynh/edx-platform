@@ -44,7 +44,7 @@ COURSELIKE_KEY_PATTERN = r'(?P<course_key_string>({}|{}))'.format(
 # Pattern to match a library key only
 LIBRARY_KEY_PATTERN = r'(?P<library_key_string>library-v1:[^/+]+\+[^/+]+)'
 
-urlpatterns = [
+urlpatterns = oauth2_urlpatterns + [
     url(r'', include('openedx.core.djangoapps.user_authn.urls_common')),
     url(r'', include('common.djangoapps.student.urls')),
     url(r'^transcripts/upload$', contentstore_views.upload_transcripts, name='upload_transcripts'),
@@ -182,9 +182,6 @@ urlpatterns = [
     url(r'^api/tasks/v0/', include('user_tasks.urls')),
     url(r'^accessibility$', contentstore_views.accessibility, name='accessibility'),
 ]
-
-# Use LMS SSO
-urlpatterns += oauth2_urlpatterns
 
 JS_INFO_DICT = {
     'domain': 'djangojs',
