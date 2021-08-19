@@ -253,8 +253,8 @@ PROCTORING_USER_OBFUSCATION_KEY = '85920908f28904ed733fe576320db18cabd7b6cd'
 WEBPACK_LOADER['DEFAULT']['TIMEOUT'] = 5
 
 ################ Using LMS SSO for login to Studio ################
-SOCIAL_AUTH_EDX_OAUTH2_KEY = 'h19MfrK5sgKuIBDNk2K7eILhl8eyUe0gGJRWMQh0'
-SOCIAL_AUTH_EDX_OAUTH2_SECRET = 'aGZHwSFjSfEHIhLP1Uq0huDs5UBERfouy1qCtomPqI1QA2ZsiVSLSBIz0VsSaqe0EoL1s8uIN0627j4AY5qh6yhuYUbOSKkZpjdxGCZ4WnCxxyyhJrbR7mX2vH0N3HAi'
+SOCIAL_AUTH_EDX_OAUTH2_KEY = 'studio-sso-key'
+SOCIAL_AUTH_EDX_OAUTH2_SECRET = 'studio-sso-secret' # in stage, prod would be high-entropy secret
 SOCIAL_AUTH_EDX_OAUTH2_ISSUER = 'http://localhost:18000'
 SOCIAL_AUTH_EDX_OAUTH2_URL_ROOT = 'http://localhost:18000'
 SOCIAL_AUTH_EDX_OAUTH2_LOGOUT_URL = 'http://localhost:18000/logout'
