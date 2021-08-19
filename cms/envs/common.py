@@ -616,6 +616,7 @@ EDX_ROOT_URL = ''
 # use the ratelimit backend to prevent brute force attacks
 AUTHENTICATION_BACKENDS = [
     'rules.permissions.ObjectPermissionBackend',
+    'auth_backends.backends.EdXOAuth2',
     'openedx.core.djangoapps.oauth_dispatch.dot_overrides.backends.EdxRateLimitedAllowAllUsersModelBackend',
     'bridgekeeper.backends.RulePermissionBackend',
 ]
@@ -641,6 +642,9 @@ FRONTEND_LOGOUT_URL = lambda settings: settings.LMS_ROOT_URL + '/logout'
 derived('FRONTEND_LOGOUT_URL')
 FRONTEND_REGISTER_URL = lambda settings: settings.LMS_ROOT_URL + '/register'
 derived('FRONTEND_REGISTER_URL')
+
+# Use LMS SSO for login
+SOCIAL_AUTH_STRATEGY = 'auth_backends.strategies.EdxDjangoStrategy'
 
 LMS_ENROLLMENT_API_PATH = "/api/enrollment/v1/"
 ENTERPRISE_API_URL = LMS_INTERNAL_ROOT_URL + '/enterprise/api/v1/'
@@ -1615,6 +1619,9 @@ INSTALLED_APPS = [
 
     # Database-backed Organizations App (http://github.com/edx/edx-organizations)
     'organizations',
+
+    # Allow Studio to use LMS for SSO
+    'social_django',
 ]
 
 

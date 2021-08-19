@@ -7,6 +7,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib.admin import autodiscover as django_autodiscover
 from django.utils.translation import ugettext_lazy as _
+from auth_backends.urls import oauth2_urlpatterns
 from edx_api_doc_tools import make_docs_urls
 from ratelimitbackend import admin
 
@@ -190,6 +191,9 @@ if not settings.DISABLE_DEPRECATED_SIGNIN_URL:
     urlpatterns += [
         url(r'^signin$', contentstore_views.login_redirect_to_lms),
     ]
+
+# Use LMS SSO
+urlpatterns += oauth2_urlpatterns
 
 if not settings.DISABLE_DEPRECATED_SIGNUP_URL:
     # TODO: Remove deprecated signup url when traffic proves it is no longer in use
