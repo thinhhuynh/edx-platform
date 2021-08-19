@@ -262,8 +262,6 @@ SOCIAL_AUTH_EDX_OAUTH2_SECRET = 'studio-sso-secret' # in stage, prod would be hi
 SOCIAL_AUTH_EDX_OAUTH2_URL_ROOT = 'http://edx.devstack.lms:18000'
 SOCIAL_AUTH_EDX_OAUTH2_PUBLIC_URL_ROOT = 'http://localhost:18000' # used in browser redirect
 
-# TODO: Log out of Studio *and* LMS. (Something to add to LMS logout page, or in Studio's logout flow?)
-
 # TODO: Fix scope -- user_id and permissions are being rejected; profile and email are accepted
 
 # Don't form the return redirect URL with HTTPS on devstack
