@@ -88,8 +88,6 @@ urlpatterns = [
     # restful api
     url(r'^$', contentstore_views.howitworks, name='homepage'),
     url(r'^howitworks$', contentstore_views.howitworks, name='howitworks'),
-    # NB
-    url(r'^signin_redirect_to_lms$', contentstore_views.login_redirect_to_lms, name='login_redirect_to_lms'),
     url(r'^request_course_creator$', contentstore_views.request_course_creator, name='request_course_creator'),
     url(fr'^course_team/{COURSELIKE_KEY_PATTERN}(?:/(?P<email>.+))?$',
         contentstore_views.course_team_handler, name='course_team_handler'),
