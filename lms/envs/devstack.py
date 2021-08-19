@@ -30,7 +30,7 @@ LMS_BASE = 'localhost:18000'
 CMS_BASE = 'localhost:18010'
 SITE_NAME = LMS_BASE
 
-SESSION_COOKIE_NAME = 'sessionid-lms'
+SESSION_COOKIE_NAME = 'lms_sessionid'
 
 # By default don't use a worker, execute tasks as if they were local functions
 CELERY_ALWAYS_EAGER = True
