@@ -262,3 +262,6 @@ SOCIAL_AUTH_EDX_OAUTH2_ISSUER = 'http://localhost:18000'
 SOCIAL_AUTH_EDX_OAUTH2_URL_ROOT = 'http://localhost:18000'
 SOCIAL_AUTH_EDX_OAUTH2_LOGOUT_URL = 'http://localhost:18000/logout'
 SOCIAL_AUTH_EDX_OAUTH2_PUBLIC_URL_ROOT = 'http://localhost:18000'
+
+# Don't form the return redirect URL with HTTPS on devstack
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
