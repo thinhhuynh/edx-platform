@@ -185,21 +185,8 @@ urlpatterns = [
     url(r'^accessibility$', contentstore_views.accessibility, name='accessibility'),
 ]
 
-# NB
-if not settings.DISABLE_DEPRECATED_SIGNIN_URL:
-    # TODO: Remove deprecated signin url when traffic proves it is no longer in use
-    urlpatterns += [
-        url(r'^signin$', contentstore_views.login_redirect_to_lms),
-    ]
-
 # Use LMS SSO
 urlpatterns += oauth2_urlpatterns
-
-if not settings.DISABLE_DEPRECATED_SIGNUP_URL:
-    # TODO: Remove deprecated signup url when traffic proves it is no longer in use
-    urlpatterns += [
-        url(r'^signup$', contentstore_views.register_redirect_to_lms, name='register_redirect_to_lms'),
-    ]
 
 JS_INFO_DICT = {
     'domain': 'djangojs',

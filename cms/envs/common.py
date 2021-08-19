@@ -2375,30 +2375,6 @@ REGISTRATION_EXTRA_FIELDS = {
 }
 EDXAPP_PARSE_KEYS = {}
 
-###################### DEPRECATED URLS ##########################
-
-# .. toggle_name: DISABLE_DEPRECATED_SIGNIN_URL
-# .. toggle_implementation: DjangoSetting
-# .. toggle_default: False
-# .. toggle_description: Toggle for removing the deprecated /signin url.
-# .. toggle_use_cases: temporary
-# .. toggle_creation_date: 2019-12-02
-# .. toggle_target_removal_date: 2020-06-01
-# .. toggle_warnings: This url can be removed once it no longer has any real traffic.
-# .. toggle_tickets: ARCH-1253
-DISABLE_DEPRECATED_SIGNIN_URL = False
-
-# .. toggle_name: DISABLE_DEPRECATED_SIGNUP_URL
-# .. toggle_implementation: DjangoSetting
-# .. toggle_default: False
-# .. toggle_description: Toggle for removing the deprecated /signup url.
-# .. toggle_use_cases: temporary
-# .. toggle_creation_date: 2019-12-02
-# .. toggle_target_removal_date: 2020-06-01
-# .. toggle_warnings: This url can be removed once it no longer has any real traffic.
-# .. toggle_tickets: ARCH-1253
-DISABLE_DEPRECATED_SIGNUP_URL = False
-
 ##### LOGISTRATION RATE LIMIT SETTINGS #####
 LOGISTRATION_RATELIMIT_RATE = '100/5m'
 LOGISTRATION_PER_EMAIL_RATELIMIT_RATE = '30/5m'
