@@ -615,8 +615,8 @@ EDX_ROOT_URL = ''
 
 # use the ratelimit backend to prevent brute force attacks
 AUTHENTICATION_BACKENDS = [
-    'rules.permissions.ObjectPermissionBackend',
     'auth_backends.backends.EdXOAuth2',
+    'rules.permissions.ObjectPermissionBackend',
     'openedx.core.djangoapps.oauth_dispatch.dot_overrides.backends.EdxRateLimitedAllowAllUsersModelBackend',
     'bridgekeeper.backends.RulePermissionBackend',
 ]
