@@ -256,12 +256,15 @@ PROCTORING_USER_OBFUSCATION_KEY = '85920908f28904ed733fe576320db18cabd7b6cd'
 WEBPACK_LOADER['DEFAULT']['TIMEOUT'] = 5
 
 ################ Using LMS SSO for login to Studio ################
+# Magic settings to enable social_django OAuth2 provider "edx"
 SOCIAL_AUTH_EDX_OAUTH2_KEY = 'studio-sso-key'
 SOCIAL_AUTH_EDX_OAUTH2_SECRET = 'studio-sso-secret' # in stage, prod would be high-entropy secret
-SOCIAL_AUTH_EDX_OAUTH2_ISSUER = 'http://localhost:18000'
-SOCIAL_AUTH_EDX_OAUTH2_URL_ROOT = 'http://localhost:18000'
-SOCIAL_AUTH_EDX_OAUTH2_LOGOUT_URL = 'http://localhost:18000/logout'
-SOCIAL_AUTH_EDX_OAUTH2_PUBLIC_URL_ROOT = 'http://localhost:18000'
+SOCIAL_AUTH_EDX_OAUTH2_URL_ROOT = 'http://edx.devstack.lms:18000'
+SOCIAL_AUTH_EDX_OAUTH2_PUBLIC_URL_ROOT = 'http://localhost:18000' # used in browser redirect
+
+# TODO: Log out of Studio *and* LMS. (Something to add to LMS logout page, or in Studio's logout flow?)
+
+# TODO: Fix scope -- user_id and permissions are being rejected; profile and email are accepted
 
 # Don't form the return redirect URL with HTTPS on devstack
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
