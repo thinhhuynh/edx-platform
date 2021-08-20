@@ -128,7 +128,7 @@ class TestDumpToNeo4jCommand(TestDumpToNeo4jCommandBase):
             'dump_to_neo4j',
             courses=self.course_strings[:number_of_courses],
             host='mock_host',
-            http_port=7474,
+            port=7687,
             user='mock_user',
             password='mock_password',
         )
@@ -154,7 +154,7 @@ class TestDumpToNeo4jCommand(TestDumpToNeo4jCommandBase):
             'dump_to_neo4j',
             skip=self.course_strings[:1],
             host='mock_host',
-            http_port=7474,
+            port=7687,
             user='mock_user',
             password='mock_password',
         )
@@ -181,7 +181,7 @@ class TestDumpToNeo4jCommand(TestDumpToNeo4jCommandBase):
             skip=self.course_strings[:1],
             courses=self.course_strings[:1],
             host='mock_host',
-            http_port=7474,
+            port=7687,
             user='mock_user',
             password='mock_password',
         )
@@ -207,7 +207,7 @@ class TestDumpToNeo4jCommand(TestDumpToNeo4jCommandBase):
         call_command(
             'dump_to_neo4j',
             host='mock_host',
-            http_port=7474,
+            port=7687,
             user='mock_user',
             password='mock_password'
         )

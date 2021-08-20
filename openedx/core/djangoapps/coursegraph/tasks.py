@@ -381,18 +381,17 @@ def authenticate_and_create_graph(credentials):
     """
 
     host = credentials['host']
-    https_port = credentials['https_port']
-    http_port = credentials['http_port']
+    port = credentials['port']
     secure = credentials['secure']
     neo4j_user = credentials['user']
     neo4j_password = credentials['password']
 
     graph = Graph(
-        protocol='http',
+        protocol='bolt',
         password=neo4j_password,
         user=neo4j_user,
         address=host,
-        port=https_port if secure else http_port,
+        port=port,
         secure=secure,
     )
 
